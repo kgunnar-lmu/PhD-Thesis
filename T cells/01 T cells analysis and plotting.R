@@ -168,7 +168,7 @@ U1=DimPlot(T_seu2, label = TRUE,group.by = "Time",pt.size = 0.5)+scale_color_man
 U2=DimPlot(T_seu2, label = TRUE,group.by = "Experiment",pt.size = 0.5)+scale_color_manual(values = cc[c(1,5)])
 plot_grid(U1,U2)
 ####################################################################
-# T_seux=T_seu2[,T_seu2$Time%in%c(96,144)]
+# T_seux=T_seu2[,T_seu2$Time%in%c(72,144)]
 # T_seux <- NormalizeData(T_seux, normalization.method = "LogNormalize", scale.factor = 10000)
 # T_seux <- FindVariableFeatures(T_seux, selection.method = "vst", nfeatures = 5000)
 # all.genes <- rownames(T_seux)
@@ -359,7 +359,7 @@ head(markers_early_vs_standyouty,20)
 ggplotly(u1)
 
 Idents(T_seu2)=T_seu2$Time
-markers_1vs_3=FindMarkers(T_seu2, ident.1 = c("4","8"), ident.2 = c("0","24","96","144"))
+markers_1vs_3=FindMarkers(T_seu2, ident.1 = c("4","8"), ident.2 = c("0","24","72","144"))
 markers_1vs_3a=markers_1vs_3[markers_1vs_3$avg_logFC>1,]
 markers_1vs_3a=markers_1vs_3a[order(markers_1vs_3a$p_val_adj),]
 head(markers_1vs_3a,25)
@@ -452,17 +452,17 @@ VlnPlot(T_seu2,features = c("CSF2"),pt.size = 1.2,group.by = "Time")
 Idents(T_seu2)=T_seu2$Time
 
 Ovs144=FindMarkers(T_seu2, ident.1 = "144", ident.2 = "0")
-Ovs96=FindMarkers(T_seu2, ident.1 = "96", ident.2 = "0")
+Ovs72=FindMarkers(T_seu2, ident.1 = "72", ident.2 = "0")
 Ovs24=FindMarkers(T_seu2, ident.1 = "24", ident.2 = "0")
 Ovs4=FindMarkers(T_seu2, ident.1 = "4", ident.2 = "0")
 Ovs8=FindMarkers(T_seu2, ident.1 = "8", ident.2 = "0")
-loppvs96=FindMarkers(T_seu2, ident.1 = "144", ident.2 = "96")
-earlyvlate=FindMarkers(T_seu2, ident.1 = c("96","144"), ident.2 = c("4","8"))
-earlyvlate=FindMarkers(T_seu2, ident.1 = c("96","144"), ident.2 = c("0","4","8"))
+loppvs72=FindMarkers(T_seu2, ident.1 = "144", ident.2 = "72")
+earlyvlate=FindMarkers(T_seu2, ident.1 = c("72","144"), ident.2 = c("4","8"))
+earlyvlate=FindMarkers(T_seu2, ident.1 = c("72","144"), ident.2 = c("0","4","8"))
 ovsearly=FindMarkers(T_seu2, ident.1 = c("4","8"), ident.2 = c("0"))
 
-activation_markers=FindMarkers(T_seu2, ident.1 = c("4","8"), ident.2 = c("0","24","96","144"))
-diff_markers=FindMarkers(T_seu2, ident.1 = c("96","144"), ident.2 = c("0","4","8","24"))
+activation_markers=FindMarkers(T_seu2, ident.1 = c("4","8"), ident.2 = c("0","24","72","144"))
+diff_markers=FindMarkers(T_seu2, ident.1 = c("72","144"), ident.2 = c("0","4","8","24"))
 
 head(earlyvlate,15)
 head(ovsearly,15)
@@ -534,7 +534,7 @@ plot_grid(early,v144)
 GO1[GO1$Description%in%GO2$Description,]
 #######################################################################################
 #######################################################################################
-volcano_data=Ovs96
+volcano_data=Ovs72
 dim(volcano_data)
 volcano_data=volcano_data[!is.na(volcano_data$p_val_adj),]
 dim(volcano_data)
@@ -551,13 +551,13 @@ volcano_data$top[volcano_data$p_val_adj<1e-25]=volcano_data$Symbol[volcano_data$
 volcano_data$top[abs(volcano_data$avg_logFC)<1.5]=NA
 head(volcano_data)
 
-v96=ggplot(volcano_data,aes(x=avg_logFC,y=-log10(p_val_adj),label=top,color=group))+geom_point(aes(size=-log2(p_val_adj)))+
+v72=ggplot(volcano_data,aes(x=avg_logFC,y=-log10(p_val_adj),label=top,color=group))+geom_point(aes(size=-log2(p_val_adj)))+
   geom_text_repel(color="black")+theme_classic()+scale_color_manual(values = ggplot2::alpha(pal[c(2,3,4)],0.7))+theme(legend.position = "none")+
-  ggtitle("0h vs 96h")
-v96
+  ggtitle("0h vs 72h")
+v72
 pp=ggplot(volcano_data,aes(x=avg_logFC,y=-log10(p_val_adj),label=Symbol,color=group))+geom_point(aes(size=-log2(p_val_adj)))+
   theme_classic()+scale_color_manual(values = ggplot2::alpha(pal[c(2,3,4)],0.7))+theme(legend.position = "none")+
-  ggtitle("0h vs 96h")
+  ggtitle("0h vs 72h")
 ggplotly(pp)
 ##############################################################################################################################################################################
 volcano_data=Ovs24
@@ -583,7 +583,7 @@ v24=ggplot(volcano_data,aes(x=avg_logFC,y=-log10(p_val_adj),label=top,color=grou
 v24
 #######################################################################################
 #######################################################################################
-plot_grid(v144,v96,v24)
+plot_grid(v144,v72,v24)
 #######################################################################################
 VlnPlot(T_seu2,features = c("GZMB","CSF2","ACTB","IL2RA"),group.by = "Time")
 
@@ -906,7 +906,7 @@ FeaturePlot(T_seu,features = naa,pt.size = 1,cols=ccheat)
 ##############################################################################
 Samples<- as.factor(T_seu@meta.data$Time)
 names(Samples)<- T_seu@meta.data$XC
-Samples[Samples=="96"]=144
+Samples[Samples=="72"]=144
 Samples[Samples=="0"]=0
 Samples[Samples=="4"]=0
 Samples[Samples=="8"]=0

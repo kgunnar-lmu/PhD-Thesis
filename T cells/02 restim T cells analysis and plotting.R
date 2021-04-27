@@ -357,7 +357,7 @@ ggplot(go_plot,aes(x=order,y=Enrichment, color=log10fdr,size=Genes,label=Descrip
 #
 
 Idents(T_seu_stim)=T_seu_stim$Timepoint
-ovs144_stim=FindMarkers(T_seu_stim, ident.1 ="6", ident.2 = "0")
+ovs144_stim=FindMarkers(T_seu_stim, ident.1 ="7", ident.2 = "0")
 head(ovs144_stim,10)
 volcano_data=ovs144_stim
 volcano_data=volcano_data[!is.na(volcano_data$p_val_adj),]
